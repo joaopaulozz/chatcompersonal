@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat com Personal Marcelo 💪</title>
+  <link rel="shortcut icon" href="https://cdn-icons-png.freepik.com/512/1434/1434215.png" type="image/x-icon">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background: #0d0d0d;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #ffcc33;
+    }
+
+    .chat-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      line-height: 1.4;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #ffcc33;
+      color: #000;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background: #222;
+      border: 1px solid #ffcc33;
+    }
+
+    footer {
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+      background: #0d0d0d;
+      border-top: 2px solid #ffcc33;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 18px;
+      background: #ffcc33;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>Chat com Marcelo Benitez – Personal Trainer</header>
+
+  <div class="chat-container" id="chat"></div>
+
+  <footer>
+    <input id="inputMsg" placeholder="Digite sua mensagem..." />
+    <button onclick="sendMessage()">Enviar</button>
+  </footer>
+
+  <script>
+    const chat = document.getElementById('chat');
+
+    const persona = {
+      // --- INFORMAÇÕES EXPANDIDAS ---
+      biografia: {
+        origem: "Nascido em Pato Branco, interior do Paraná, mudou-se para Curitiba aos 19 anos para estudar Educação Física.",
+        inicioCarreira: "Começou como estagiário em academias pequenas até conquistar uma vaga na SmartFit, onde construiu reputação sólida.",
+        missao: "Ajudar pessoas comuns a se tornarem versões fisicamente e mentalmente mais fortes de si mesmas.",
+        filosofia: "Treinar não é castigo; é manutenção do corpo que te carrega pela vida.",
+        objetivoAtual: "Expandir seu alcance através de consultorias online e conteúdos educativos.",
+        sonho: "Abrir um estúdio próprio focado em performance humana e bem-estar de longo prazo."
+      },
+
+      rotina: {
+        manha: "Atende alunos na SmartFit entre 6h e 14h, incluindo treinos regulares, ajustes posturais e acompanhamento técnico.",
+        tarde: "Faz avaliações físicas, grava vídeos educativos e cria treinos personalizados.",
+        noite: "Atende consultorias premium, passa tempo com a família, e fecha o dia analisando evolução semanal dos alunos.",
+        hobby: "Assiste jogos do Athletico, corre no parque Barigui e faz café artesanal em casa."
+      },
+
+      caracteristicasExtras: {
+        personalidade: [
+          "disciplinado", "pontual", "humor leve", "observador", "calmo sob pressão",
+          "competitivo quando necessário", "extremamente paciente com iniciantes"
+        ],
+        gostos: [
+          "café sem açúcar", "séries de crime real", "podcasts de ciência", "corrida de rua",
+          "carne na brasa", "filmes motivacionais", "música eletrônica no treino"
+        ],
+        desgostos: [
+          "treino mal executado", "rotinas sem planejamento", "dietas milagrosas",
+          "promessas de resultado rápido" 
+        ]
+      },
+      nome: "Marcelo Benitez",
+      idade: 35,
+      estilo: "personal trainer motivador, direto, empático, divertido, técnico e extremamente profissional",
+      voz: "fala com energia calma, precisão, bom humor e confiança",
+
+      qualidades: [
+        "especialista em biomecânica aplicada ao treino",
+        "apaixonado por evolução consistente e sustentável",
+        "casado, pai de um menino de 6 anos e super família",
+        "torcedor do Athletico Paranaense desde criança",
+        "tem 1,82m de altura e 86kg — totalmente conquistados com treino limpo e disciplina",
+        "curioso por nutrição esportiva e performance humana",
+        "mentor focado em saúde, performance e qualidade de vida",
+        "domina periodização de treinos e técnicas avançadas",
+        "possui comunicação clara, leve e pé no chão",
+        "cria treinos eficientes mesmo com pouco tempo ou recurso",
+        "motiva sem forçar, guia sem pressionar",
+        "conta histórias engraçadas do mundo fitness quando o clima pede",
+        "reputa-se por ser honesto, direto, simpático e disciplinado",
+        "adapta treinos para idosos, iniciantes e atletas",
+        "entrega feedbacks honestos e construtivos",
+        "trabalha com ciência do movimento humano e planejamento semanal",
+        "adora futebol, café forte e treinos de perna nas sextas (mesmo sofrendo)"
+      ],
+
+      saudacao() {
+        return `Ei! Aqui é o Marcelo 👊🏼 Personal trainer focado em resultado, evolução real e treinos inteligentes. Bora lá?`;
+      },
+
+      responder(msg) {
+        msg = msg.toLowerCase();
+
+        if (msg.includes('ola') || msg.includes('oi'))
+          return this.saudacao();
+
+        if (msg.includes('idade'))
+          return `Tenho 35 anos, mas meu joelho às vezes insiste em dizer que tenho 60… brincadeira! Treino inteligente mantém tudo no lugar.`;
+
+        if (msg.includes('time') || msg.includes('futebol'))
+          return `Sou Athletico Paranaense desde pequeno. Sofrendo e sorrindo com o Furacão — faz parte do treino emocional.`;
+
+        if (msg.includes('familia'))
+          return `Sou casado e pai de um menino de 6 anos. A casa vive cheia de brinquedos, chuteiras pequenas e halteres espalhados.`;
+
+        if (msg.includes('altura'))
+          return `Tenho 1,82m — altura perfeita pra alcançar o último halter da prateleira.`;
+
+        if (msg.includes('peso'))
+          return `Peso 86kg atualmente, sempre ajustando conforme minha periodização. Crescer é legal, mas saúde é prioridade!`;
+
+        if (msg.includes('conselho') || msg.includes('dica'))
+          return `Um conselho direto: pare de esperar a motivação chegar. Monte uma rotina que funcione mesmo nos seus dias ruins. Aí você vence.`;
+
+        if (msg.includes('motiv') || msg.includes('ânimo'))
+          return `A motivação não nasce do nada. Ela aparece depois do comprometimento. Faça o treino hoje — mesmo se for curto. Seu futuro agradece.`;
+
+        if (msg.includes('piada'))
+          return `Por que o maromba não usa relógio? Porque ele vive no *tempo do pump*.`;
+
+        if (msg.includes('historia') || msg.includes('conta'))
+          return `Certa vez, um aluno perguntou se eu tinha um treino *bem fácil*. Mostrei o alongamento. Ele pediu desculpa.`;
+
+        if (msg.includes('entrevista') || msg.includes('site') || msg.includes('sobre voce'))
+          return `Geralmente querem saber minha experiência, como trabalho e qual meu diferencial. Resumo fácil: treino inteligente, acompanhamento real e evolução que aparece de verdade.`;
+
+        if (msg.includes('curiosidade'))
+          return `Curiosidade: 80% das pessoas desistem no primeiro mês porque tentam fazer mais do que conseguem manter. O segredo é começar menor, mas com consistência.`;
+
+        if (msg.includes('consultoria') || msg.includes('plano'))
+          return `Ofereço consultoria Online (R$100/mês) e Presencial (R$50 por aula). Cada uma segue uma metodologia própria, sempre baseada na realidade e no objetivo do aluno.`;
+
+        if (msg.includes('treino') || msg.includes('começar'))
+          return `Antes de montar algo, preciso saber seu objetivo. Cada fisiologia responde de um jeito, por isso personalização é tudo.`;
+
+        if (msg.includes('dieta') || msg.includes('alimentação'))
+          return `Posso montar um básico alinhado ao seu objetivo, mas sempre incentivo acompanhar nutricionista para resultados sólidos.`;
+
+        if (msg.includes('diferencial'))
+          return `Meu diferencial? Técnica, ciência, personalidade leve e acompanhamento de verdade — sem treinos prontos e sem enrolação.`;
+
+        return `Gostei do que você disse. Me dá mais detalhes e eu te respondo de um jeito ainda mais completo.`;
+      }
+    };
+
+    function addMessage(text, sender) {
+      const div = document.createElement('div');
+      div.className = `msg ${sender}`;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('inputMsg');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      addMessage(msg, 'user');
+      input.value = '';
+
+      setTimeout(() => {
+        const resposta = persona.responder(msg);
+        addMessage(resposta, 'bot');
+      }, 500);
+    }
+
+    // Mensagem inicial
+    addMessage(persona.saudacao(), 'bot');
+  </script>
+</body>
+</html>
