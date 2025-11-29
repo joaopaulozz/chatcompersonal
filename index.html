@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chat com Personal Marcelo 💪</title>
   <link rel="shortcut icon" href="https://cdn-icons-png.freepik.com/512/1434/1434215.png" type="image/x-icon">
+
   <style>
     body {
       margin: 0;
@@ -18,12 +19,23 @@
 
     header {
       background: #0d0d0d;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      letter-spacing: 1px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
       border-bottom: 2px solid #ffcc33;
+    }
+
+    header img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 2px solid #ffcc33;
+    }
+
+    header span {
+      font-size: 22px;
+      font-weight: bold;
     }
 
     .chat-container {
@@ -40,18 +52,28 @@
       padding: 12px 16px;
       border-radius: 12px;
       line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
     }
 
-    .user {
+    .msg.bot {
+      background: #222;
+      border: 1px solid #ffcc33;
+    }
+
+    .msg.user {
       align-self: flex-end;
       background: #ffcc33;
       color: #000;
+      justify-content: flex-end;
     }
 
-    .bot {
-      align-self: flex-start;
-      background: #222;
-      border: 1px solid #ffcc33;
+    .avatar-bot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #ffcc33;
     }
 
     footer {
@@ -80,12 +102,59 @@
       font-weight: bold;
       cursor: pointer;
     }
+
+    #opcoes {
+      padding: 15px;
+      background: #0d0d0d;
+      border-top: 2px solid #ffcc33;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btnOpcao {
+      background: #ffcc33;
+      color: #000;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btnOpcao:hover {
+      background: #e6b830;
+    }
   </style>
 </head>
+
 <body>
-  <header>Chat com Marcelo Benitez – Personal Trainer</header>
+
+  <header>
+    <img src="Marcelo 1.jpg" alt="Avatar do Marcelo">
+    <span>Marcelo Benitez – Personal Trainer</span>
+  </header>
 
   <div class="chat-container" id="chat"></div>
+
+  <div id="opcoes">
+    <button class="btnOpcao" onclick="selecionarOpcao('Qual sua idade?')">Idade</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Qual seu time?')">Time</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Fale da sua família')">Família</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Qual sua altura?')">Altura</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Qual seu peso?')">Peso</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Me dê um conselho')">Conselho</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Me dá motivação')">Motivação</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Conta uma piada')">Piada</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Conta uma história')">História</button>
+    <button class="btnOpcao" onclick="selecionarOpcao('Como funciona sua consultoria?')">Consultoria</button>
+
+    <button class="btnOpcao" onclick="selecionarOpcao('Por que você quer um site?')">Site</button>
+
+    <!-- AGORA ENVIA "jogo" (funciona certo) -->
+    <button class="btnOpcao" onclick="selecionarOpcao('jogo')">Jogo</button>
+  </div>
 
   <footer>
     <input id="inputMsg" placeholder="Digite sua mensagem..." />
@@ -96,125 +165,105 @@
     const chat = document.getElementById('chat');
 
     const persona = {
-      // --- INFORMAÇÕES EXPANDIDAS ---
-      biografia: {
-        origem: "Nascido em Pato Branco, interior do Paraná, mudou-se para Curitiba aos 19 anos para estudar Educação Física.",
-        inicioCarreira: "Começou como estagiário em academias pequenas até conquistar uma vaga na SmartFit, onde construiu reputação sólida.",
-        missao: "Ajudar pessoas comuns a se tornarem versões fisicamente e mentalmente mais fortes de si mesmas.",
-        filosofia: "Treinar não é castigo; é manutenção do corpo que te carrega pela vida.",
-        objetivoAtual: "Expandir seu alcance através de consultorias online e conteúdos educativos.",
-        sonho: "Abrir um estúdio próprio focado em performance humana e bem-estar de longo prazo."
-      },
-
-      rotina: {
-        manha: "Atende alunos na SmartFit entre 6h e 14h, incluindo treinos regulares, ajustes posturais e acompanhamento técnico.",
-        tarde: "Faz avaliações físicas, grava vídeos educativos e cria treinos personalizados.",
-        noite: "Atende consultorias premium, passa tempo com a família, e fecha o dia analisando evolução semanal dos alunos.",
-        hobby: "Assiste jogos do Athletico, corre no parque Barigui e faz café artesanal em casa."
-      },
-
-      caracteristicasExtras: {
-        personalidade: [
-          "disciplinado", "pontual", "humor leve", "observador", "calmo sob pressão",
-          "competitivo quando necessário", "extremamente paciente com iniciantes"
-        ],
-        gostos: [
-          "café sem açúcar", "séries de crime real", "podcasts de ciência", "corrida de rua",
-          "carne na brasa", "filmes motivacionais", "música eletrônica no treino"
-        ],
-        desgostos: [
-          "treino mal executado", "rotinas sem planejamento", "dietas milagrosas",
-          "promessas de resultado rápido" 
-        ]
-      },
       nome: "Marcelo Benitez",
-      idade: 35,
-      estilo: "personal trainer motivador, direto, empático, divertido, técnico e extremamente profissional",
-      voz: "fala com energia calma, precisão, bom humor e confiança",
-
-      qualidades: [
-        "especialista em biomecânica aplicada ao treino",
-        "apaixonado por evolução consistente e sustentável",
-        "casado, pai de um menino de 6 anos e super família",
-        "torcedor do Athletico Paranaense desde criança",
-        "tem 1,82m de altura e 86kg — totalmente conquistados com treino limpo e disciplina",
-        "curioso por nutrição esportiva e performance humana",
-        "mentor focado em saúde, performance e qualidade de vida",
-        "domina periodização de treinos e técnicas avançadas",
-        "possui comunicação clara, leve e pé no chão",
-        "cria treinos eficientes mesmo com pouco tempo ou recurso",
-        "motiva sem forçar, guia sem pressionar",
-        "conta histórias engraçadas do mundo fitness quando o clima pede",
-        "reputa-se por ser honesto, direto, simpático e disciplinado",
-        "adapta treinos para idosos, iniciantes e atletas",
-        "entrega feedbacks honestos e construtivos",
-        "trabalha com ciência do movimento humano e planejamento semanal",
-        "adora futebol, café forte e treinos de perna nas sextas (mesmo sofrendo)"
-      ],
+      jogando: false,
 
       saudacao() {
         return `Ei! Aqui é o Marcelo 👊🏼 Personal trainer focado em resultado, evolução real e treinos inteligentes. Bora lá?`;
       },
 
       responder(msg) {
+        const original = msg;
         msg = msg.toLowerCase();
 
+        // JOGO - SEMPRE DETECTADO ANTES DO RESTO
+        if (msg.includes('jogo') || msg.includes('vamos jogar')) {
+          this.jogando = true;
+          return `Bora! Escolhe aí: pedra, papel ou tesoura 👊🔥`;
+        }
+
+        // Se já estiver jogando
+        if (this.jogando) {
+          const opcoes = ['pedra', 'papel', 'tesoura'];
+          const escolhaJogador = opcoes.find(op => msg.includes(op));
+
+          if (!escolhaJogador) {
+            return `Precisa escolher pedra, papel ou tesoura para continuar!`;
+          }
+
+          const escolhaBot = opcoes[Math.floor(Math.random() * 3)];
+          this.jogando = false;
+
+          if (escolhaJogador === escolhaBot)
+            return `Eu escolhi ${escolhaBot}. Empatamos! 🟡`;
+
+          if (
+            (escolhaJogador === 'pedra' && escolhaBot === 'tesoura') ||
+            (escolhaJogador === 'papel' && escolhaBot === 'pedra') ||
+            (escolhaJogador === 'tesoura' && escolhaBot === 'papel')
+          ) {
+            return `Eu escolhi ${escolhaBot}. Você ganhou! 🟢 Mandou bem demais!`;
+          }
+
+          return `Eu escolhi ${escolhaBot}. Ganhei! 🔥 Próxima rodada você me pega!`;
+        }
+
+        // Conversa normal
         if (msg.includes('ola') || msg.includes('oi'))
           return this.saudacao();
 
         if (msg.includes('idade'))
-          return `Tenho 35 anos, mas meu joelho às vezes insiste em dizer que tenho 60… brincadeira! Treino inteligente mantém tudo no lugar.`;
+          return `Tenho 35 anos, mas o joelho às vezes tenta me sabotar. Treino inteligente mantém tudo no lugar.`;
 
-        if (msg.includes('time') || msg.includes('futebol'))
-          return `Sou Athletico Paranaense desde pequeno. Sofrendo e sorrindo com o Furacão — faz parte do treino emocional.`;
+        if (msg.includes('time'))
+          return `Sou Athletico Paranaense. Sofrendo e sorrindo como todo bom torcedor.`;
 
-        if (msg.includes('familia'))
-          return `Sou casado e pai de um menino de 6 anos. A casa vive cheia de brinquedos, chuteiras pequenas e halteres espalhados.`;
+        if (msg.includes('famil'))
+          return `Sou casado e pai de um menino de 6 anos. A sala vira parque toda noite.`;
 
         if (msg.includes('altura'))
-          return `Tenho 1,82m — altura perfeita pra alcançar o último halter da prateleira.`;
+          return `Tenho 1,82m. Ideal pra alcançar o último halter da prateleira.`;
 
         if (msg.includes('peso'))
-          return `Peso 86kg atualmente, sempre ajustando conforme minha periodização. Crescer é legal, mas saúde é prioridade!`;
+          return `Peso 86kg no momento, sempre variando conforme minha fase de treino.`;
 
-        if (msg.includes('conselho') || msg.includes('dica'))
-          return `Um conselho direto: pare de esperar a motivação chegar. Monte uma rotina que funcione mesmo nos seus dias ruins. Aí você vence.`;
+        if (msg.includes('conselho'))
+          return `Tenha uma rotina que te mantenha no caminho mesmo nos dias ruins.`;
 
-        if (msg.includes('motiv') || msg.includes('ânimo'))
-          return `A motivação não nasce do nada. Ela aparece depois do comprometimento. Faça o treino hoje — mesmo se for curto. Seu futuro agradece.`;
+        if (msg.includes('motiv'))
+          return `Motivação nasce da ação. Começa hoje e deixa o resto comigo.`;
 
         if (msg.includes('piada'))
-          return `Por que o maromba não usa relógio? Porque ele vive no *tempo do pump*.`;
+          return `Por que o maromba não usa relógio? Porque vive no *tempo do pump*.`;
 
-        if (msg.includes('historia') || msg.includes('conta'))
-          return `Certa vez, um aluno perguntou se eu tinha um treino *bem fácil*. Mostrei o alongamento. Ele pediu desculpa.`;
+        if (msg.includes('hist'))
+          return `Um aluno pediu treino leve. Passei alongamento. Ele saiu suando como se tivesse corrido uma meia maratona.`;
 
-        if (msg.includes('entrevista') || msg.includes('site') || msg.includes('sobre voce'))
-          return `Geralmente querem saber minha experiência, como trabalho e qual meu diferencial. Resumo fácil: treino inteligente, acompanhamento real e evolução que aparece de verdade.`;
+        if (msg.includes('consultoria'))
+          return `Consultoria Online (R$100/mês) e Presencial (R$50 a aula). Sempre personalizada.`;
 
-        if (msg.includes('curiosidade'))
-          return `Curiosidade: 80% das pessoas desistem no primeiro mês porque tentam fazer mais do que conseguem manter. O segredo é começar menor, mas com consistência.`;
+        if (msg.includes('site'))
+          return `Quero um site para vender aulas online e alcançar alunos do Brasil inteiro. É meu próximo passo profissional.`;
 
-        if (msg.includes('consultoria') || msg.includes('plano'))
-          return `Ofereço consultoria Online (R$100/mês) e Presencial (R$50 por aula). Cada uma segue uma metodologia própria, sempre baseada na realidade e no objetivo do aluno.`;
-
-        if (msg.includes('treino') || msg.includes('começar'))
-          return `Antes de montar algo, preciso saber seu objetivo. Cada fisiologia responde de um jeito, por isso personalização é tudo.`;
-
-        if (msg.includes('dieta') || msg.includes('alimentação'))
-          return `Posso montar um básico alinhado ao seu objetivo, mas sempre incentivo acompanhar nutricionista para resultados sólidos.`;
-
-        if (msg.includes('diferencial'))
-          return `Meu diferencial? Técnica, ciência, personalidade leve e acompanhamento de verdade — sem treinos prontos e sem enrolação.`;
-
-        return `Gostei do que você disse. Me dá mais detalhes e eu te respondo de um jeito ainda mais completo.`;
+        return `Gostei do que você disse. Me explica um pouco mais pra eu te responder melhor.`;
       }
     };
 
     function addMessage(text, sender) {
       const div = document.createElement('div');
       div.className = `msg ${sender}`;
-      div.textContent = text;
+
+      if (sender === "bot") {
+        const img = document.createElement('img');
+        img.src = "https://cdn-icons-png.flaticon.com/512/3001/3001767.png";
+        img.className = "avatar-bot";
+        div.appendChild(img);
+      }
+
+      const textNode = document.createElement('span');
+      textNode.textContent = text;
+      div.appendChild(textNode);
+
       chat.appendChild(div);
       chat.scrollTop = chat.scrollHeight;
     }
@@ -230,11 +279,20 @@
       setTimeout(() => {
         const resposta = persona.responder(msg);
         addMessage(resposta, 'bot');
-      }, 500);
+      }, 400);
     }
 
-    // Mensagem inicial
+    function selecionarOpcao(txt) {
+      addMessage(txt, 'user');
+
+      setTimeout(() => {
+        const resposta = persona.responder(txt);
+        addMessage(resposta, 'bot');
+      }, 400);
+    }
+
     addMessage(persona.saudacao(), 'bot');
   </script>
+
 </body>
 </html>
